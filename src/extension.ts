@@ -8,7 +8,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 	let provider1 = vscode.languages.registerCompletionItemProvider('plaintext', {
-
 		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
 
 			// a simple completion item which inserts `Hello World!`
@@ -37,8 +36,13 @@ export function activate(context: vscode.ExtensionContext) {
 			commandCompletion.insertText = 'new ';
 			commandCompletion.command = { command: 'editor.action.triggerSuggest', title: 'Re-trigger completions...' };
 
+			const twCharacterCompletion = new vscode.CompletionItem('tw');
+			commitCharacterCompletion.commitCharacters = ['.'];
+			commitCharacterCompletion.documentation = new vscode.MarkdownString('Press `.` to get `IBM BPM namespaces.`');
+
 			// return all completion items as array
 			return [
+				twCharacterCompletion,
 				simpleCompletion,
 				snippetCompletion,
 				commitCharacterCompletion,
@@ -47,22 +51,20 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	const provider2 = vscode.languages.registerCompletionItemProvider(
-		'plaintext',
-		{
+	const provider2 = vscode.languages.registerCompletionItemProvider('plaintext', {
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
 
 				// get all text until the `position` and check if it reads `console.`
 				// and iff so then complete if `log`, `warn`, and `error`
 				let linePrefix = document.lineAt(position).text.substr(0, position.character);
-				if (!linePrefix.endsWith('console.')) {
+				if (!linePrefix.endsWith('tw.')) {
 					return undefined;
 				}
 
 				return [
-					new vscode.CompletionItem('log', vscode.CompletionItemKind.Method),
-					new vscode.CompletionItem('warn', vscode.CompletionItemKind.Method),
-					new vscode.CompletionItem('error', vscode.CompletionItemKind.Method),
+					new vscode.CompletionItem('local', vscode.CompletionItemKind.Method),
+					new vscode.CompletionItem('system', vscode.CompletionItemKind.Method),
+					new vscode.CompletionItem('object', vscode.CompletionItemKind.Method),
 				];
 			}
 		},
@@ -70,22 +72,19 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 	context.subscriptions.push(provider1, provider2);
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-		console.log('Congratulations, your extension "ibm-bpm-vscode-extension" is now active!');
+	console.log('Congratulations, your extension "ibm-bpm-vscode-extension" is now active!');
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
+	// let disposable = vscode.commands.registerCommand('extension.helloWorld', () => {
 		// The code you place here will be executed every time your command is executed
 
 		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World!');
-	});
+	// 	vscode.window.showInformationMessage('Hello World!');
+	// });
 
-	context.subscriptions.push(disposable);
+	// context.subscriptions.push(disposable);
 }
 
 // this method is called when your extension is deactivated
