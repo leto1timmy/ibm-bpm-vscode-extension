@@ -2,12 +2,14 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 
+import BPMCompletionItemProvider from './features/completionItemProvider';
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
 
-	let provider1 = vscode.languages.registerCompletionItemProvider('plaintext', {
+	let provider1 = vscode.languages.registerCompletionItemProvider('javascript', {
 		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
 
 			// a simple completion item which inserts `Hello World!`
@@ -51,7 +53,7 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	const provider2 = vscode.languages.registerCompletionItemProvider('plaintext', {
+	const provider2 = vscode.languages.registerCompletionItemProvider('javascript', {
 			provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
 
 				// get all text until the `position` and check if it reads `console.`
