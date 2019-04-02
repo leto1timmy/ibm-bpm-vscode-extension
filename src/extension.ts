@@ -73,8 +73,9 @@ export function activate(context: vscode.ExtensionContext) {
 		'.' // triggered whenever a '.' is being typed
 	);
 
+
 	context.subscriptions.push(provider1, provider2);
-	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('javascript', new BPMCompletionItemProvider(), 'tw.system.', '.'));
+	context.subscriptions.push(vscode.languages.registerCompletionItemProvider('javascript', new BPMCompletionItemProvider(), '.'));
 	console.log('Congratulations, your extension "ibm-bpm-vscode-extension" is now active!');
 
 	// The command has been defined in the package.json file
