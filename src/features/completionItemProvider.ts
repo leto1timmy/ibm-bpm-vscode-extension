@@ -2,5 +2,8 @@ import { CompletionItemProvider, CompletionItem, CompletionItemKind, Cancellatio
 
 
 export default class BPMCompletionItemProvider implements CompletionItemProvider {
+    provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): import("vscode").ProviderResult<CompletionItem[] | import("vscode").CompletionList> {
+        throw new Error("Method not implemented.");
+    }
 
 }
