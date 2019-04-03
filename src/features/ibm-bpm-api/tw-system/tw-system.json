@@ -1,0 +1,24 @@
+{
+    "tw": {
+        "local": "",
+        "object": "",
+        "system": {
+            "type": "object",
+            "descirption": "",
+            "properties": {
+                "currentProcessInstanceID": {
+                    "type": "object",
+                    "descirption": "",
+                    "properties": {
+                        "name": "",
+                        "id": ""
+                    }
+                }
+            },
+            "startProcessByName": {
+                "type": "function",
+                "descirption": ""
+            }
+        }
+    }
+}
