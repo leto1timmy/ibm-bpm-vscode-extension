@@ -12,7 +12,7 @@ export default class BPMCompletionItemProvider implements CompletionItemProvider
 
         let result: CompletionItem[] = [];
         let json = JSON.parse(fs.readFileSync('/Users/marekmichalcewicz/ibm-bpm-vscode-extension/src/features/ibm-bpm-api/tw-system/tw-system.json', 'utf8'));
-        console.log(json);
+        //console.log(json);
         // let shouldProvideCompletionItems = workspace.getConfiguration('javascript').get<boolean>('suggest.basic', true);
         // if (!shouldProvideCompletionItems) {
         // 	return Promise.resolve(result);
@@ -38,9 +38,12 @@ export default class BPMCompletionItemProvider implements CompletionItemProvider
                 // try {json = json.strArray[index];} catch(e) {
                 //     console.log(e);
                 // }
-                jsonPath = jsonPath + ("." + strArray[index]);
-
-
+                jsonPath = jsonPath + ("." + strArray[index]); //+ properties
+                let j = eval(jsonPath);
+                if (j && j.type === "object") {
+                    jsonPath = jsonPath + ".properties";
+                }
+                console.log("log j ");
                 console.log(jsonPath);
 
             }
@@ -68,10 +71,23 @@ export default class BPMCompletionItemProvider implements CompletionItemProvider
             console.log(names);
 
             names.forEach(name => {
+                let currObj = eval(jsonPath + '.' + name);
+                let cItemKind = 0;
+                switch (currObj.type) {
+                    case "object":
+                        cItemKind = CompletionItemKind.Variable;
+                        break;
+                    case "function":
+                        cItemKind = CompletionItemKind.Function;
+                        break;
+                    default:
+                        cItemKind = CompletionItemKind.Variable;
+                }
+
                 let x: IEntry = {};
-                x.description = "asd";
-                x.signature = "qwe";
-                result.push(createNewProposal(CompletionItemKind.Variable, name, x));
+                x.description = currObj.description;
+                x.signature = "tmp qwe";
+                result.push(createNewProposal(cItemKind, name, x));
             });
 
             // for (let name in names) {
@@ -106,6 +122,6 @@ export default class BPMCompletionItemProvider implements CompletionItemProvider
             // }
         }
         console.log(result);
-            return Promise.resolve(result);
+        return Promise.resolve(result);
     }
 }
