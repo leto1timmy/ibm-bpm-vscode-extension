@@ -12,7 +12,7 @@ export default class BPMCompletionItemProvider implements CompletionItemProvider
 
         let result: CompletionItem[] = [];
         let json = JSON.parse(fs.readFileSync('/Users/marekmichalcewicz/ibm-bpm-vscode-extension/src/features/ibm-bpm-api/tw-system/tw-system.json', 'utf8'));
-        //console.log(json);
+
         // let shouldProvideCompletionItems = workspace.getConfiguration('javascript').get<boolean>('suggest.basic', true);
         // if (!shouldProvideCompletionItems) {
         // 	return Promise.resolve(result);
@@ -33,28 +33,23 @@ export default class BPMCompletionItemProvider implements CompletionItemProvider
                 if (strArray[index].length === 0) {
                     break;
                 }
-                console.log(index);
-                console.log(strArray[index]);
-                // try {json = json.strArray[index];} catch(e) {
-                //     console.log(e);
-                // }
-                jsonPath = jsonPath + ("." + strArray[index]); //+ properties
+
+                jsonPath = jsonPath + ("." + strArray[index]);
                 let j = eval(jsonPath);
                 if (j && j.type === "object") {
                     jsonPath = jsonPath + ".properties";
                 }
-                console.log("log j ");
+                console.log("log jsonPath");
                 console.log(jsonPath);
 
             }
 
-
-
-
-            //let added: any = {};
             let createNewProposal = function (kind: CompletionItemKind, name: string, entry: twSystemVariables.IEntry | null): CompletionItem {
                 let proposal: CompletionItem = new CompletionItem(name);
                 proposal.kind = kind;
+                proposal.commitCharacters = ['.'];
+                proposal.documentation = "tmp documentation";
+
                 if (entry) {
                     if (entry.description) {
                         proposal.documentation = entry.description;
@@ -89,15 +84,6 @@ export default class BPMCompletionItemProvider implements CompletionItemProvider
                 x.signature = "tmp qwe";
                 result.push(createNewProposal(cItemKind, name, x));
             });
-
-            // for (let name in names) {
-            //     let x: IEntry = {};
-            //     x.description = "asd";
-            //     x.signature = "qwe";
-            //     result.push(createNewProposal(CompletionItemKind.Variable, name, x));
-
-            // }
-
 
             // let prepareProposals = function (linePrefix: string): CompletionItem[] {
             //     let proposals: CompletionItem[] = [];
