@@ -28,19 +28,48 @@ export default class BPMCompletionItemProvider implements CompletionItemProvider
             }
             return proposal;
         };
-        
+
         // let shouldProvideCompletionItems = workspace.getConfiguration('javascript').get<boolean>('suggest.basic', true);
         // if (!shouldProvideCompletionItems) {
         // 	return Promise.resolve(result);
         // }
 
         let linePrefix = document.lineAt(position).text.substr(0, position.character);
+
+        if (linePrefix.indexOf("new tw.object") !== -1) {
+            let json = JSON.parse(fs.readFileSync('/Users/marekmichalcewicz/ibm-bpm-vscode-extension/src/features/ibm-bpm-api/tw-local/tw-local.json', 'utf8'));
+            let names = Object.getOwnPropertyNames(json);
+
+            names.forEach(name => {
+                let currObj = eval("json" + '.' + name);
+                console.log(currObj);
+                if (currObj.type === "object") {
+                    let x: IEntry = {};
+                    x.description = currObj.description;
+                    x.signature = "tmp qwe";
+                    result.push(createNewProposal(CompletionItemKind.Class, name, x));
+                }
+            });
+            console.log(result);
+            return Promise.resolve(result);
+        }
+
         switch (linePrefix) {
             case "tw.system.":
                 twSystem();
                 break;
+            case "tw.local.":
+                twLocal();
+                break;
             default:
                 return Promise.resolve(result);
+        }
+
+        function twLocal() {
+            let json = JSON.parse(fs.readFileSync('/Users/marekmichalcewicz/ibm-bpm-vscode-extension/src/features/ibm-bpm-api/tw-local/tw-local.json', 'utf8'));
+
+
+
         }
 
         function twSystem() {
