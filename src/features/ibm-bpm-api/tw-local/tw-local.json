@@ -1,0 +1,84 @@
+{
+    "BasicData": {
+        "ID": "",
+        "type": "object",
+        "properties": {
+            "clientId": {
+                "type": "String",
+                "isList": false
+            },
+            "companyEstablishDate": {
+                "type": "Date",
+                "isList": false
+            },
+            "nip": {
+                "type": "String",
+                "isList": false
+            },
+            "attribute": {
+                "type": "Attribute",
+                "isList": false
+            }
+        }
+    },
+    "Attribute": {
+        "ID": "",
+        "type": "object",
+        "properties": {
+            "historyDetails": {
+                "type": "String",
+                "isList": false
+            },
+            "status": {
+                "type": "KeyValue",
+                "isList": false
+            },
+            "isOpen": {
+                "type": "Boolean",
+                "isList": false
+            },
+            "maxNumber": {
+                "type": "Integer",
+                "isList": false
+            }
+        }
+    },
+    "KeyValue": {
+        "ID": "",
+        "type": "object",
+        "properties": {
+            "value": {
+                "type": "String",
+                "isList": false
+            },
+            "key": {
+                "type": "String",
+                "isList": false
+            }
+        }
+    },
+    "Boolean": {
+        "richDescription": "Boolean Type rich desc",
+        "description": "Boolean Type",
+        "ID": "",
+        "type": "boolean"
+    },
+    "String": {
+        "richDescription": "String Type rich desc",
+        "description": "String Type",
+        "ID": "",
+        "type": "string"
+    },
+    "Integer": {
+        "richDescription": "Integer Type rich desc",
+        "description": "Integer Type",
+        "ID": "",
+        "type": "integer"
+    },
+    "Date": {
+        "richDescription": "Date Type rich desc",
+        "description": "Date Type",
+        "ID": "",
+        "type": "date"
+    }
+}

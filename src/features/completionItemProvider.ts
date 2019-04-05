@@ -9,7 +9,7 @@ export interface IEntries { [name: string]: IEntry; }
 
 export default class BPMCompletionItemProvider implements CompletionItemProvider {
     provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): Promise<CompletionItem[]> {
-
+        let types = ["object","function","string","integer","decimal","date"];
         let result: CompletionItem[] = [];
         let json = JSON.parse(fs.readFileSync('/Users/marekmichalcewicz/ibm-bpm-vscode-extension/src/features/ibm-bpm-api/tw-system/tw-system.json', 'utf8'));
 
