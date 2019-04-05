@@ -3,8 +3,6 @@
         "type": "object",
         "descirption": "",
         "properties": {
-            "local": "",
-            "object": "",
             "system": {
                 "type": "object",
                 "descirption": "",

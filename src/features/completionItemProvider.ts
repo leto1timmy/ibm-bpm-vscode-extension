@@ -9,31 +9,50 @@ export interface IEntries { [name: string]: IEntry; }
 
 export default class BPMCompletionItemProvider implements CompletionItemProvider {
     provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext): Promise<CompletionItem[]> {
-        let types = ["object","function","string","integer","decimal","date"];
+        const basicTypes = ["function", "string", "integer", "decimal", "date"];
         let result: CompletionItem[] = [];
-        let json = JSON.parse(fs.readFileSync('/Users/marekmichalcewicz/ibm-bpm-vscode-extension/src/features/ibm-bpm-api/tw-system/tw-system.json', 'utf8'));
 
+        let createNewProposal = function (kind: CompletionItemKind, name: string, entry: twSystemVariables.IEntry | null): CompletionItem {
+            let proposal: CompletionItem = new CompletionItem(name);
+            proposal.kind = kind;
+            proposal.commitCharacters = ['.'];
+            proposal.documentation = "tmp documentation";
+
+            if (entry) {
+                if (entry.description) {
+                    proposal.documentation = entry.description;
+                }
+                if (entry.signature) {
+                    proposal.detail = entry.signature;
+                }
+            }
+            return proposal;
+        };
+        
         // let shouldProvideCompletionItems = workspace.getConfiguration('javascript').get<boolean>('suggest.basic', true);
         // if (!shouldProvideCompletionItems) {
         // 	return Promise.resolve(result);
         // }
 
         let linePrefix = document.lineAt(position).text.substr(0, position.character);
-        // if (!linePrefix.endsWith('tw.system.')) {
-        //     return Promise.resolve(result);
-        // }
+        switch (linePrefix) {
+            case "tw.system.":
+                twSystem();
+                break;
+            default:
+                return Promise.resolve(result);
+        }
 
-        let strArray = linePrefix.split('.');
+        function twSystem() {
+            let json = JSON.parse(fs.readFileSync('/Users/marekmichalcewicz/ibm-bpm-vscode-extension/src/features/ibm-bpm-api/tw-system/tw-system.json', 'utf8'));
 
-        if (strArray[strArray.length - 1].length === 0) {
-
+            let strArray = linePrefix.split('.');
             console.log(strArray);
             let jsonPath = "json";
             for (let index in strArray) {
                 if (strArray[index].length === 0) {
                     break;
                 }
-
                 jsonPath = jsonPath + ("." + strArray[index]);
                 let j = eval(jsonPath);
                 if (j && j.type === "object") {
@@ -41,26 +60,7 @@ export default class BPMCompletionItemProvider implements CompletionItemProvider
                 }
                 console.log("log jsonPath");
                 console.log(jsonPath);
-
             }
-
-            let createNewProposal = function (kind: CompletionItemKind, name: string, entry: twSystemVariables.IEntry | null): CompletionItem {
-                let proposal: CompletionItem = new CompletionItem(name);
-                proposal.kind = kind;
-                proposal.commitCharacters = ['.'];
-                proposal.documentation = "tmp documentation";
-
-                if (entry) {
-                    if (entry.description) {
-                        proposal.documentation = entry.description;
-                    }
-                    if (entry.signature) {
-                        proposal.detail = entry.signature;
-                    }
-                }
-                return proposal;
-            };
-
 
             let names = Object.getOwnPropertyNames(eval(jsonPath));
             console.log(names);
@@ -84,30 +84,18 @@ export default class BPMCompletionItemProvider implements CompletionItemProvider
                 x.signature = "tmp qwe";
                 result.push(createNewProposal(cItemKind, name, x));
             });
-
-            // let prepareProposals = function (linePrefix: string): CompletionItem[] {
-            //     let proposals: CompletionItem[] = [];
-
-            //     proposals = 
-            //     return proposals;
-            // };
-
-
-            // for (let systemFunctions in twSystemFunctions.systemFunctions) {
-            //     if (twSystemFunctions.systemFunctions.hasOwnProperty(systemFunctions)) {
-            //         added[systemFunctions] = true;
-            //         result.push(createNewProposal(CompletionItemKind.Function, systemFunctions, twSystemFunctions.systemFunctions[systemFunctions]));
-            //     }
-            // }
-
-            // for (let systemVariables in twSystemVariables.systemVariables) {
-            //     if (twSystemVariables.systemVariables.hasOwnProperty(systemVariables)) {
-            //         added[systemVariables] = true;
-            //         result.push(createNewProposal(CompletionItemKind.Variable, systemVariables, twSystemVariables.systemVariables[systemVariables]));
-            //     }
-            // }
+            console.log("result");
+            console.log(result);
+            return Promise.resolve(result);
         }
-        console.log(result);
+
+        // let prepareProposals = function (linePrefix: string): CompletionItem[] {
+        //     let proposals: CompletionItem[] = [];
+
+        //     proposals = 
+        //     return proposals;
+        // };
+        // console.log(result);
         return Promise.resolve(result);
     }
 }
