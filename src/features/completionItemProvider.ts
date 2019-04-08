@@ -33,6 +33,14 @@ export default class BPMCompletionItemProvider implements CompletionItemProvider
         // if (!shouldProvideCompletionItems) {
         // 	return Promise.resolve(result);
         // }
+        let text = document.getText();
+        let txtArray = text.split(" ");
+        for (let idx in txtArray) {
+            
+        }
+
+        console.log("text");
+        console.log(text);
 
         let linePrefix = document.lineAt(position).text.substr(0, position.character);
 
@@ -42,7 +50,6 @@ export default class BPMCompletionItemProvider implements CompletionItemProvider
 
             names.forEach(name => {
                 let currObj = eval("json" + '.' + name);
-                console.log(currObj);
                 if (currObj.type === "object") {
                     let x: IEntry = {};
                     x.description = currObj.description;
@@ -50,7 +57,6 @@ export default class BPMCompletionItemProvider implements CompletionItemProvider
                     result.push(createNewProposal(CompletionItemKind.Class, name, x));
                 }
             });
-            console.log(result);
             return Promise.resolve(result);
         }
 
