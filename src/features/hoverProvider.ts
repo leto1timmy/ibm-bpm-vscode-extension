@@ -20,6 +20,9 @@ export default class BPMHoverProvider implements HoverProvider {
         let name = document.getText(wordRange);
 
         let entry = twSystemVariables.systemVariables[name];
+
+        console.log('name', name);
+        console.log('entry', entry);
         if (entry && entry.description) {
             let signature = name + (entry.signature || '');
             let contents: MarkedString[] = [textToMarkedString(entry.description), {language: 'javascript', value: signature}];
